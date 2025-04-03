@@ -1,3 +1,7 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
 logs
 *.log
 npm-debug.log*
@@ -95,7 +99,6 @@ dist
 .pnp.*
 
 data/
-
 
 .idea/
 
