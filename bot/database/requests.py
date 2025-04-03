@@ -13,7 +13,9 @@ async def set_user(tg_id, first_name):
         )
 
         if not user:
-            session.add(database.models.User(tg_id=tg_id, first_name=first_name))
+            session.add(
+                database.models.User(tg_id=tg_id, first_name=first_name),
+            )
             await session.commit()
 
 

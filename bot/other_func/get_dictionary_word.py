@@ -1,13 +1,12 @@
 __all__ = ()
 
 import json
-import os
+import pathlib
 import random
 
 
 def get_random_dictionary_word():
-    with open(
-        os.path.join("other_files", "sl_words.json"),
+    with pathlib.Path("other_files", "sl_words.json").open(
         "r",
         encoding="utf-8",
     ) as fcc_file:
