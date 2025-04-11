@@ -1,5 +1,7 @@
 __all__ = ()
 
+import random
+
 import database.models
 from sqlalchemy import select
 
@@ -50,3 +52,32 @@ async def get_top_users():
         )
 
         return people.fetchall()
+
+
+async def get_accent_word():
+    async with database.models.async_session() as session:
+        accents = await session.scalars(
+            select(database.models.Accents),
+        )
+        accents_list = accents.all()
+        return random.choice(accents_list)
+
+
+async def get_vocabulary_word():
+    async with database.models.async_session() as session:
+        accents = await session.scalars(
+            select(database.models.VocabularyWords),
+        )
+        accents_list = accents.all()
+        return random.choice(accents_list)
+
+
+async def get_ege_task(number):
+    async with database.models.async_session() as session:
+        tasks = await session.scalars(
+            select(database.models.EgeAssignments).where(
+                database.models.EgeAssignments.number == number,
+            ),
+        )
+        task = tasks.all()
+        return random.choice(task)

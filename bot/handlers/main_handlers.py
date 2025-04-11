@@ -6,8 +6,6 @@ import aiogram.fsm.context
 import aiogram.fsm.state
 import database.requests
 import keyboards
-import other_func.get_accent
-import other_func.get_dictionary_word
 
 
 router = aiogram.Router()
@@ -19,6 +17,11 @@ class AnswerDictionaryWords(aiogram.fsm.state.StatesGroup):
 
 
 class AnswerAccentWord(aiogram.fsm.state.StatesGroup):
+    user_answer = aiogram.fsm.state.State()
+    correct_answer = aiogram.fsm.state.State()
+
+
+class EgeTask(aiogram.fsm.state.StatesGroup):
     user_answer = aiogram.fsm.state.State()
     correct_answer = aiogram.fsm.state.State()
 
@@ -54,11 +57,11 @@ async def dictionary_word(
     message: aiogram.types.Message,
     state: aiogram.fsm.context.FSMContext,
 ):
-    random_word = other_func.get_dictionary_word.get_random_dictionary_word()
-    await state.update_data(correct_answer=random_word["normal_form"])
+    random_word = await database.requests.get_vocabulary_word()
+    await state.update_data(correct_answer=random_word.normal_form)
     await state.set_state(AnswerDictionaryWords.user_answer)
     await message.answer(
-        f"Как правильно пишется слово: <b>{random_word['missing_form']}</b>?",
+        f"Как правильно пишется слово: <b>{random_word.missing_form}</b>?",
         parse_mode="HTML",
     )
 
@@ -68,8 +71,8 @@ async def accent_words(
     message: aiogram.types.Message,
     state: aiogram.fsm.context.FSMContext,
 ):
-    random_word = other_func.get_accent.get_random_accent_word()
-    await state.update_data(correct_answer=random_word["accented_form"])
+    random_word = await database.requests.get_accent_word()
+    await state.update_data(correct_answer=random_word.accented_form)
     await state.set_state(AnswerAccentWord.user_answer)
     await message.answer(
         (
@@ -77,7 +80,7 @@ async def accent_words(
             "где заглавной будет только та, на которую "
             "ставить ударение</pre>"
             "Куда падает ударение в слове: "
-            f"<b>{random_word['normal_form']}</b>?"
+            f"<b>{random_word.normal_form}</b>?"
         ),
         parse_mode="HTML",
     )

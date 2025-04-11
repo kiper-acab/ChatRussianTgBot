@@ -5,9 +5,7 @@ import logging
 import os
 
 import aiogram
-import aiogram.filters
 import aiogram.fsm.storage.memory
-import aiogram.types
 import database.models
 import dotenv
 import handlers.callbacks
